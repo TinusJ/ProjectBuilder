@@ -46,8 +46,23 @@ public class DefaultDockerComposeGenerator implements DockerComposeGenerator {
         if (config.getDatabaseType() != null && !config.getDatabaseType().isEmpty()) {
             yaml.append("    depends_on:\n");
             yaml.append("      - db\n");
+        }
+        
+        // Only add environment section if there are modules or database
+        boolean hasModules = config.getProjectModules() != null && !config.getProjectModules().isEmpty();
+        boolean hasDatabase = config.getDatabaseType() != null && !config.getDatabaseType().isEmpty();
+        
+        if (hasModules || hasDatabase) {
             yaml.append("    environment:\n");
-            addDatabaseEnvironmentVariables(yaml, config);
+            
+            // Add project modules as environment variable
+            if (hasModules) {
+                yaml.append("      PROJECT_MODULES: ").append(String.join(",", config.getProjectModules())).append("\n");
+            }
+            
+            if (hasDatabase) {
+                addDatabaseEnvironmentVariables(yaml, config);
+            }
         }
         
         yaml.append("    volumes:\n");

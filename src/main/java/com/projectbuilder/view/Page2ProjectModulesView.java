@@ -3,11 +3,14 @@ package com.projectbuilder.view;
 import com.projectbuilder.model.DockerComposeConfig;
 import com.projectbuilder.model.ProjectModule;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Page 2: Project Modules Selection
@@ -16,7 +19,7 @@ public class Page2ProjectModulesView implements WizardPage {
     
     private final DockerComposeConfig.Builder configBuilder;
     private final VerticalLayout layout;
-    private ComboBox<ProjectModule> moduleCombo;
+    private CheckboxGroup<ProjectModule> moduleCheckboxGroup;
     private String selectedProjectVersion;
     
     public Page2ProjectModulesView(DockerComposeConfig.Builder configBuilder) {
@@ -29,20 +32,19 @@ public class Page2ProjectModulesView implements WizardPage {
         layout.setPadding(true);
         layout.setSpacing(true);
         
-        H2 title = new H2("Step 2: Select Project Module");
+        H2 title = new H2("Step 2: Select Project Modules");
         Paragraph description = new Paragraph(
-            "Choose the main Spring Boot module for your application."
+            "Choose one or more modules for your application using checkboxes."
         );
         
-        // Module selection
-        moduleCombo = new ComboBox<>("Project Module");
-        moduleCombo.setItemLabelGenerator(module -> 
+        // Module selection with checkboxes
+        moduleCheckboxGroup = new CheckboxGroup<>();
+        moduleCheckboxGroup.setLabel("Project Modules");
+        moduleCheckboxGroup.setItemLabelGenerator(module -> 
             module.displayName() + " - " + module.description()
         );
-        moduleCombo.setWidthFull();
-        moduleCombo.setPlaceholder("Select a module...");
         
-        layout.add(title, description, moduleCombo);
+        layout.add(title, description, moduleCheckboxGroup);
     }
     
     @Override
@@ -57,13 +59,14 @@ public class Page2ProjectModulesView implements WizardPage {
         if (selectedProjectVersion == null) {
             selectedProjectVersion = "3.2.0"; // Default
         }
-        moduleCombo.setItems(ProjectModule.getModulesForVersion(selectedProjectVersion));
+        moduleCheckboxGroup.setItems(ProjectModule.getModulesForVersion(selectedProjectVersion));
     }
     
     @Override
     public boolean validate() {
-        if (moduleCombo.getValue() == null) {
-            Notification.show("Please select a project module", 3000, Notification.Position.MIDDLE);
+        Set<ProjectModule> selected = moduleCheckboxGroup.getSelectedItems();
+        if (selected == null || selected.isEmpty()) {
+            Notification.show("Please select at least one project module", 3000, Notification.Position.MIDDLE);
             return false;
         }
         return true;
@@ -71,6 +74,10 @@ public class Page2ProjectModulesView implements WizardPage {
     
     @Override
     public void onNext() {
-        configBuilder.projectModule(moduleCombo.getValue().id());
+        Set<ProjectModule> selected = moduleCheckboxGroup.getSelectedItems();
+        List<String> moduleIds = selected.stream()
+            .map(ProjectModule::id)
+            .toList();
+        configBuilder.projectModules(moduleIds);
     }
 }

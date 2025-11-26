@@ -1,5 +1,7 @@
 package com.projectbuilder.model;
 
+import java.util.List;
+
 /**
  * Configuration data holder for building Docker Compose files.
  * Uses Builder pattern for clean construction.
@@ -7,7 +9,7 @@ package com.projectbuilder.model;
 public class DockerComposeConfig {
     private final String javaVersion;
     private final String projectVersion;
-    private final String projectModule;
+    private final List<String> projectModules;
     private final String databaseType;
     private final String databaseVersion;
     private final byte[] backupFile;
@@ -16,7 +18,7 @@ public class DockerComposeConfig {
     private DockerComposeConfig(Builder builder) {
         this.javaVersion = builder.javaVersion;
         this.projectVersion = builder.projectVersion;
-        this.projectModule = builder.projectModule;
+        this.projectModules = builder.projectModules;
         this.databaseType = builder.databaseType;
         this.databaseVersion = builder.databaseVersion;
         this.backupFile = builder.backupFile;
@@ -31,8 +33,8 @@ public class DockerComposeConfig {
         return projectVersion;
     }
 
-    public String getProjectModule() {
-        return projectModule;
+    public List<String> getProjectModules() {
+        return projectModules;
     }
 
     public String getDatabaseType() {
@@ -58,7 +60,7 @@ public class DockerComposeConfig {
     public static class Builder {
         private String javaVersion;
         private String projectVersion;
-        private String projectModule;
+        private List<String> projectModules;
         private String databaseType;
         private String databaseVersion;
         private byte[] backupFile;
@@ -74,8 +76,8 @@ public class DockerComposeConfig {
             return this;
         }
 
-        public Builder projectModule(String projectModule) {
-            this.projectModule = projectModule;
+        public Builder projectModules(List<String> projectModules) {
+            this.projectModules = projectModules;
             return this;
         }
 

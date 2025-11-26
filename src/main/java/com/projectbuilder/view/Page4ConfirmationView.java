@@ -58,7 +58,14 @@ public class Page4ConfirmationView implements WizardPage {
         
         addSummaryItem("Java Version", config.getJavaVersion());
         addSummaryItem("Project Version", config.getProjectVersion());
-        addSummaryItem("Project Module", config.getProjectModule());
+        
+        // Display multiple modules
+        if (config.getProjectModules() != null && !config.getProjectModules().isEmpty()) {
+            addSummaryItem("Project Modules", String.join(", ", config.getProjectModules()));
+        } else {
+            addSummaryItem("Project Modules", "None selected");
+        }
+        
         addSummaryItem("Database Type", config.getDatabaseType());
         addSummaryItem("Database Version", config.getDatabaseVersion());
         

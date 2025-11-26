@@ -32,7 +32,7 @@ public class Page1JavaProjectVersionView implements WizardPage {
         
         H2 title = new H2("Step 1: Select Java and Project Version");
         Paragraph description = new Paragraph(
-            "Choose the Java version and Spring Boot project version for your Docker Compose setup."
+            "Choose the Java version and custom project version for your Docker Compose setup."
         );
         
         // Java version selection
@@ -43,11 +43,11 @@ public class Page1JavaProjectVersionView implements WizardPage {
         javaVersionCombo.setPlaceholder("Select Java version...");
         
         // Project version selection
-        projectVersionCombo = new ComboBox<>("Spring Boot Version");
+        projectVersionCombo = new ComboBox<>("Custom Projects");
         projectVersionCombo.setItems(ProjectVersion.getAvailableVersions());
         projectVersionCombo.setItemLabelGenerator(ProjectVersion::displayName);
         projectVersionCombo.setWidthFull();
-        projectVersionCombo.setPlaceholder("Select Spring Boot version...");
+        projectVersionCombo.setPlaceholder("Select custom project...");
         
         layout.add(title, description, javaVersionCombo, projectVersionCombo);
     }
@@ -65,7 +65,7 @@ public class Page1JavaProjectVersionView implements WizardPage {
         }
         
         if (projectVersionCombo.getValue() == null) {
-            Notification.show("Please select a Spring Boot version", 3000, Notification.Position.MIDDLE);
+            Notification.show("Please select a custom project", 3000, Notification.Position.MIDDLE);
             return false;
         }
         
