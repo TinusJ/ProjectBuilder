@@ -105,7 +105,15 @@ public class DefaultDockerComposeGenerator implements DockerComposeGenerator {
         }
         
         yaml.append("    volumes:\n");
-        yaml.append("      - db-data:/var/lib/").append(getDataPath(dbType)).append("\n");
+        
+        // Use proper mount paths based on database type
+        if ("mongodb".equals(dbType)) {
+            yaml.append("      - db-data:/data/db\n");
+        } else if ("redis".equals(dbType)) {
+            yaml.append("      - db-data:/data\n");
+        } else {
+            yaml.append("      - db-data:/var/lib/").append(getDataPath(dbType)).append("\n");
+        }
         
         if (config.getBackupFile() != null && config.getBackupFile().length > 0) {
             yaml.append("      - ./backup/").append(config.getBackupFileName()).append(":/docker-entrypoint-initdb.d/backup.sql\n");

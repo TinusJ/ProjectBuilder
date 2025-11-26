@@ -61,6 +61,8 @@ public class Page5DockerComposeView implements WizardPage {
         return layout;
     }
     
+    private boolean buttonsAdded = false;
+    
     @Override
     public void onShow() {
         // Generate the Docker Compose file
@@ -69,8 +71,9 @@ public class Page5DockerComposeView implements WizardPage {
         composeFileArea.setValue(generatedCompose);
         
         // Add download button if not already present
-        if (layout.getComponentCount() == 4) { // Only add once
+        if (!buttonsAdded) {
             addDownloadButton();
+            buttonsAdded = true;
         }
     }
     
