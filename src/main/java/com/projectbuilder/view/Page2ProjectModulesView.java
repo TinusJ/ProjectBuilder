@@ -3,14 +3,12 @@ package com.projectbuilder.view;
 import com.projectbuilder.model.DockerComposeConfig;
 import com.projectbuilder.model.ProjectModule;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
